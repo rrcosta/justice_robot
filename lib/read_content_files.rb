@@ -37,14 +37,18 @@ module ReadContentFiles
 
     s.first_row.upto(s.last_row) do |line|
       #s.cell(linha, coluna)
-      number_process = s.cell(line, 1)&.strip
+      process_number = s.cell(line, 1)&.strip
       publication    = s.cell(line, 3)&.strip
 
       CONTENT << {
-        number_process: number_process,
-        number_process_withoutmask: number_process&.gsub('-','')&.gsub('.',''),
+        number_process: process_number,
+        number_process_withoutmask: number_process_without_mask(process_number),
         publication: publication,
-      } unless number_process.nil?
+      } unless process_number.nil?
     end
+  end
+
+  def number_process_without_mask(process_number)
+    process_number&.gsub('-','')&.gsub('.','')&.gsub('/','')&.gsub('?','')&.gsub('!','')
   end
 end
