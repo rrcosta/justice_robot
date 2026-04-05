@@ -11,41 +11,39 @@ module CheckInputFiles
     analize_files = []
     invalid_files = []
 
-    # Checar se tem arquivo XLS dentro da pasta ENTRADA
-    if exists_files?(log)
-      check_files.each_slice(25) do |group|
-        group.each do |file|
-          if VALID_EXTENSIONS_FILE.include?(File.extname(file))
-            if File.zero?(file)
-              invalid_files << {
-                file: file,
-                error: 'Arquivo conrrompido OU invalido'
-              }
-              next
-            else
-              analize_files << {
-                file: file,
-                basename_file: File&.basename(file),
-                extension_file: File.extname(file)
-              }
-            end
-          else
-            invalid_files << {
-              file: File&.basename(file),
-              error: "Extensao: '#{File.extname(file)}' nao é valida"
-            }
-          end
+    return [false, invalid_files] unless exists_files?(CHECK_INPUT_FILES)
+
+    check_files.each_slice(25) do |group|
+      group.each do |file|
+        next unless File.file?(file)
+
+        next unless VALID_EXTENSIONS_FILE.include?(File.extname(file))
+
+        if File.zero?(file)
+          populate_invalid_files(log, file, 'Arquivo conrrompido OU invalido')
+          next
+        else
+          origem_file = file&.gsub(CHECK_INPUT_FILES, '')&.gsub(File&.basename(file), '')
+          # Remove o ultimo '/'
+          origem_file&.rstrip!('/')
+          # responsavel por pegar de qual Tribunal sera o arquivo e sua respectiva subdivisao
+          tmp_court = origem_file&.lstrip('/')&.rpartition('/')
+
+          court     = tmp_court[0].nil? ? origem_file : tmp_court[0]
+          sub_court = tmp_court[2].nil? ? origem_file : tmp_court[2]
+
+          analize_files << {
+            court: court,
+            sub_court: sub_court,
+            file: file,
+            basename_file: File&.basename(file),
+            extension_file: File.extname(file)
+          }
         end
       end
-
-      msg_log_invalid_files(log, invalid_files) if invalid_files.size > 0
-
-      return true, analize_files if analize_files.size.positive?
-    else
-      invalid_files << { file: '', error: msg_files_not_exists }
     end
 
-    [false, invalid_files]
+    [true, analize_files]
   rescue StandarError => err
     [false, err.message]
   end
@@ -58,19 +56,16 @@ module CheckInputFiles
     Dir.glob("#{CHECK_INPUT_FILES}/**/*")
   end
 
-  def msg_files_not_exists
-    "#{dta_now}__Pasta_Diretorio_ENTRADA_nao_localizada_na_raiz_deste_projeto"
+  def exists_files?(file)
+    File.directory?(file)
   end
 
-  def exists_files?(log)
-    return true if File.directory?(CHECK_INPUT_FILES)
+  def populate_invalid_files(log, file, motive)
+    invalid_files << {
+      file: File&.basename(file),
+      error: motive
+    }
 
-    log.error(msg_files_not_exists)
-  end
-
-  def msg_log_invalid_files(log, invalid_files)
-    invalid_files&.each do |inv_fle|
-      log.warn("#{inv_fle[:error]} - File: #{inv_fle[:file]}")
-    end
+    log.warn(motive)
   end
 end
