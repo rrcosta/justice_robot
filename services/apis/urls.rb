@@ -4,7 +4,7 @@ module Apis
     BASE_URL      = 'https://api-publica.datajud.cnj.jus.br/'.freeze
     TOKEN_DATAJUD = ENV.fetch('TOKEN_API', '').freeze
 
-    ALL = %w(TRIBUNAL_JUSTICA_ESTADUAL JUSTICA_FEDERAL TRIBUNAIS_SUPERIORES JUSTICA_TRABALHO JUSTICA_MILITAR)
+    ALL = %w(TRIBUNAL_JUSTICA_ESTADUAL JUSTICA_FEDERAL TRIBUNAL_SUPERIOR JUSTICA_TRABALHO JUSTICA_MILITAR)
 
     TRIBUNAL_JUSTICA_ESTADUAL = {
       AC:	"api_publica_tjac/_search",
@@ -45,7 +45,7 @@ module Apis
       TRF6: "api_publica_trf6/_search"
     }.freeze
 
-    TRIBUNAIS_SUPERIORES = {
+    TRIBUNAL_SUPERIOR = {
       TRABALHO:  "api_publica_tst/_search",
       ELEITORAL: "api_publica_tse/_search",
       JUSTICA:   "api_publica_stj/_search",
