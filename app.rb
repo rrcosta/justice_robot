@@ -14,9 +14,9 @@ LOGGER = Logger.new($stdout)
 status, _ = CheckDirectories.execute(LOGGER)
 
 if status
-  status, analize_files = CheckInputFiles.load_files(LOGGER)
+  status, files = CheckInputFiles.execute(LOGGER)
 
-  status, contents = ReadContentFiles.execute(LOGGER, analize_files) if status
+  status, contents = ReadContentFiles.execute(LOGGER, files) if status
 
   status, contents = ::Apis::Datajud.call(LOGGER, contents) if status
 

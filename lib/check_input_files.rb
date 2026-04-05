@@ -7,7 +7,7 @@ module CheckInputFiles
   VALID_EXTENSIONS_FILE = %w[.xls .xlsx .ods .csv].freeze
   CHECK_INPUT_FILES = "#{Dir.pwd}/entrada"
 
-  def load_files(log = nil)
+  def execute(log = nil)
     analize_files = []
     invalid_files = []
 

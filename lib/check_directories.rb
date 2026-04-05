@@ -27,10 +27,10 @@ module CheckDirectories
     [false, { error: e.message }]
   end
 
-  def creates_folders_at_array(ar, parent_folder = nil)
-    return [] if ar.nil?
+  def creates_folders_at_array(origin_array, parent_folder = nil)
+    return [] if origin_array.nil?
 
-    ar.each do |name_directory|
+    origin_array.each do |name_directory|
       check_directory = "#{parent_folder}/#{name_directory}"
       creates_directory(check_directory) unless exists_directory?(check_directory)
     end
