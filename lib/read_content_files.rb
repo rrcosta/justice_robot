@@ -11,15 +11,17 @@ module ReadContentFiles
 
   def execute(log, analize_files)
     # SAMPLE of struct
-    # {file: "/home/rafael/Development/r2c/justice_robot/entrada/01.xlsx", basename_file: "01.xlsx", extension_file: ".xlsx"}
-    # {file: "/home/rafael/Development/r2c/justice_robot/entrada/01_.ods", basename_file: "01_.ods", extension_file: ".ods"}
+    # {
+    #   court: "TRIBUNAL_JUSTICA_ESTADUAL",
+    #   sub_court: "SP",
+    #   file: "/home/rafael/Development/r2c/justice_robot/entrada/TRIBUNAL_JUSTICA_ESTADUAL/SP/01.xlsx",
+    #   basename_file: "01.xlsx",
+    #   extension_file: ".xlsx"
+    #   }
 
     analize_files&.each_slice(25) do |group|
       group&.each do |file|
-        #file[:file],
-        #file[:basename_file],
-        #file[:extension_file]
-        load_content_file(log, file[:file], file[:basename_file])
+        load_content_file(log, file)
       end
     end
 
@@ -31,20 +33,23 @@ module ReadContentFiles
     [false, err.message]
   end
 
-  def load_content_file(log, file, basename_file = nil)
-    s = SimpleSpreadsheet::Workbook.read(file)
+  def load_content_file(log, file)
+    file_name = file[:file]
+
+    s = SimpleSpreadsheet::Workbook.read(file_name)
 
     s.selected_sheet = s.sheets.first
 
     s.first_row.upto(s.last_row) do |line|
       #s.cell(linha, coluna)
       process_number = s.cell(line, 1)&.strip
-      publication    = s.cell(line, 3)&.strip
 
       CONTENT << {
+        court: file[:court],
+        sub_court: file[:sub_court],
+        basename_file: file[:basename_file],
         number_process: process_number,
         number_process_withoutmask: number_process_without_mask(process_number),
-        publication: publication,
       } unless process_number.nil?
     end
   end
@@ -58,7 +63,8 @@ module ReadContentFiles
   # Retona o numero do processo com zeros a esquerda ate completar 20 digitos
   def adds_left_zero_chars_at_process_number(num_proces)
     size_complement_size = num_proces&.size
-    complement_char      = (SIZE_CHARS_NUMBER_PROCESS - size_complement_size)
+
+    complement_char = (SIZE_CHARS_NUMBER_PROCESS - size_complement_size)
     complement_char = complement_char.negative? ? complement_char&.abs : complement_char
 
     new_num_proces = "0" * complement_char + num_proces
