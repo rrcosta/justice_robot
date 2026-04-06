@@ -16,6 +16,7 @@ module PreparedFiles
       end
 
       CONTENT&.compact!
+      CONTENT&.flatten!
 
       [true, CONTENT&.uniq]
     rescue StandardError => err

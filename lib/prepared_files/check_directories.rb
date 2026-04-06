@@ -1,5 +1,5 @@
 require './lib/prepared_files/tools'
-require './services/apis/urls'
+require './service/apis/datajud/urls'
 
 module PreparedFiles
   module CheckDirectories
@@ -9,7 +9,7 @@ module PreparedFiles
     include ::PreparedFiles::Tools
 
     ROOT_DIRECTORY       = "#{Dir.pwd}/entrada".freeze
-    CHILDREN_DIRECTORIES = ::Apis::Urls::ALL.freeze
+    CHILDREN_DIRECTORIES = ::Service::Apis::Datajud::Urls::ALL.freeze
 
     def execute(log)
       creates_directory(
@@ -38,7 +38,7 @@ module PreparedFiles
 
     def check_grandchildren_directories
       CHILDREN_DIRECTORIES.each do |name_directory|
-        grandchildren = "::Apis::Urls::#{name_directory}"
+        grandchildren = "::Service::Apis::Datajud::Urls::#{name_directory}"
         verify = eval(grandchildren)&.keys
 
         creates_folders_at_array(verify, "#{ROOT_DIRECTORY}/#{name_directory}")
