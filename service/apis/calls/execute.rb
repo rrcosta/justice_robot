@@ -10,7 +10,7 @@ module Service
 
         TIMEOUT = 180.freeze
 
-        def call(http_method = nil, url, headers, body_request, timeout = nil)
+        def call(http_method = nil, url, headers, body_request, timeout)
           return if url.nil?
 
           http_method = :GET if http_method.nil?
@@ -28,8 +28,8 @@ module Service
           end
 
           response
-        rescue StandardError => e
-          e.message
+        rescue => err
+          err.message
         end
 
         def generates_http(uri, timeout)
