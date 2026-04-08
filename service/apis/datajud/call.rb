@@ -31,16 +31,19 @@ module Service
           #   number_process: "0020480-56.2025.8.26.1011",
           #   number_process_withoutmask: "00204805620258261011"
           # }
+          #
 
-          contents.each do |content|
-            next if content&.dig(:number_process_withoutmask).nil?
+          contents&.each_slice(250) do |group|
+            group.each do |content|
+              next if content&.dig(:number_process_withoutmask).nil?
 
-            calls_provider(
-              log,
-              { court: content&.dig(:court), sub_court: content&.dig(:sub_court) },
-              params(content&.dig(:number_process_withoutmask)),
-              content&.dig(:number_process_withoutmask)
-            )
+              calls_provider(
+                log,
+                { court: content&.dig(:court), sub_court: content&.dig(:sub_court) },
+                params(content&.dig(:number_process_withoutmask)),
+                content&.dig(:number_process_withoutmask)
+              )
+            end
           end
         end
 
