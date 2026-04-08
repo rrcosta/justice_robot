@@ -11,8 +11,6 @@ module Service
         # Não pode ter o freeze pois tera concat
         PREFIX = "::Service::Apis::Datajud::Urls::"
 
-        CONTENT_TYPE    = 'application/json'.freeze
-        TIMEOUT         = 180.freeze
         TOKEN_DATAJUD   = ::Service::Apis::Datajud::Urls::TOKEN_DATAJUD.freeze
         BASE_URL        = ::Service::Apis::Datajud::Urls::BASE_URL.freeze
 
@@ -56,7 +54,7 @@ module Service
             url,
             headers,
             body,
-            TIMEOUT
+            180
           )
 
           calls_error_log(log, url, num_process, response&.code) if response&.code != '200'
@@ -66,7 +64,7 @@ module Service
 
         def headers
           {
-            'Content-Type': CONTENT_TYPE,
+            'Content-Type': 'application/json',
             'Authorization': "APIKey #{TOKEN_DATAJUD}"
           }
         end
