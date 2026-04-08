@@ -9,13 +9,13 @@ module PreparedFiles
     include ::PreparedFiles::Tools
 
     ROOT_DIRECTORY       = "#{Dir.pwd}/entrada".freeze
-    FINAL_PROCESS        = "#{Dir.pwd}/saida".freeze
+    FINAL_DIRECTORY      = "#{Dir.pwd}/saida".freeze
     CHILDREN_DIRECTORIES = ::Service::Apis::Datajud::Urls::ALL.freeze
 
     def execute(log)
       creates_directory(
-        FINAL_PROCESS
-      ) unless exists_files_or_directory?(FINAL_PROCESS)
+        FINAL_DIRECTORY
+      ) unless exists_files_or_directory?(FINAL_DIRECTORY)
 
       creates_directory(
         ROOT_DIRECTORY
