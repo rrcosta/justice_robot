@@ -25,6 +25,8 @@ module Service
         end
 
         def read_contents(log, contents)
+          return unless contents.instance_of?(Array)
+
           # SAMPLE 'contents'
           # {
           #   court: "TRIBUNAL_JUSTICA_ESTADUAL",
@@ -57,7 +59,9 @@ module Service
             180
           )
 
-          calls_error_log(log, url, num_process, response&.code) if response&.code != '200'
+          calls_error_log(
+            log, url, num_process, response&.code
+          ) if response&.code != '200'
 
           STRUCT_RETURNED << JSON.parse(response&.body&.strip)
         end
