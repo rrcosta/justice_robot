@@ -1,6 +1,5 @@
 require './service/apis/datajud/urls'
 require './service/apis/calls/execute'
-require './service/apis/datajud/check_response'
 
 module Service
   module Apis
@@ -8,12 +7,9 @@ module Service
       module Call
         extend self
 
-        # Não pode ter o freeze pois tera concat
-        PREFIX = "::Service::Apis::Datajud::Urls::"
-
         TOKEN_DATAJUD   = ::Service::Apis::Datajud::Urls::TOKEN_DATAJUD.freeze
         BASE_URL        = ::Service::Apis::Datajud::Urls::BASE_URL.freeze
-
+        PREFIX          = "::Service::Apis::Datajud::Urls::".freeze
         STRUCT_RETURNED = []
 
         def execute(log, contents)
@@ -90,15 +86,16 @@ module Service
         end
 
         def get_complement_url(options)
-          sub_court = options[:sub_court] || nil
-          court     = options.nil? ? "TRIBUNAL_JUSTICA_ESTADUAL" : options[:court]
+          str_returned = PREFIX.dup
+          sub_court    = options[:sub_court] || nil
+          court        = options.nil? ? "TRIBUNAL_JUSTICA_ESTADUAL" : options[:court]
 
-          return "#{PREFIX}#{court}" if sub_court.nil?
+          return "#{str_returned}#{court}" if sub_court.nil?
 
-          PREFIX.concat(court).concat('[')
-          PREFIX.concat(":#{sub_court}]")
+          str_returned.concat(court).concat('[')
+          str_returned.concat(":#{sub_court}]")
 
-          PREFIX
+          str_returned
         end
 
         def calls_error_log(log, url, num_process, http_code)
