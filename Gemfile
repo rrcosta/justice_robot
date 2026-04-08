@@ -8,3 +8,5 @@ source "https://rubygems.org"
 gem "simple-spreadsheet", "~> 0.5.0"
 
 gem "dotenv", "~> 3.2"
+
+gem "write_xlsx", "~> 1.15"
