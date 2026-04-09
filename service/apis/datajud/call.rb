@@ -62,7 +62,13 @@ module Service
             log, url, num_process, response&.code
           ) if response&.code != '200'
 
-          STRUCT_RETURNED << JSON.parse(response&.body&.strip)
+          returned = {
+            destin: destin,
+            num_process: num_process,
+            result: JSON.parse(response&.body&.strip)
+          }
+
+          STRUCT_RETURNED << returned
         end
 
         def headers
