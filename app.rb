@@ -5,7 +5,8 @@ require 'logger'
 require './lib/prepared_files/check_input_files'
 require './lib/prepared_files/read_content_files'
 require './lib/prepared_files/check_directories'
-require './lib/prepared_files/creates_final_directories'
+
+require './lib/creates_xlsx/generates'
 
 require './service/apis/datajud/urls'
 require './service/apis/datajud/call'
@@ -43,7 +44,7 @@ if status
       number_process: pre_xls&.dig('number_process')
     }
 
-    ::PreparedFiles::CreatesFinalDirectories.execute(LOGGER, dir_struct)
+    ::CreatesXlsx::Generates.execute(LOGGER, dir_struct, pre_xls)
   end
 else
   msg = "Não foi possivel Criar OU Ler os arquivos do diretório ENTRADA. Detalhes: #{err_check_directories[:error]}"
