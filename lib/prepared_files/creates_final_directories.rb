@@ -58,6 +58,3 @@ module PreparedFiles
     end
   end
 end
-
-# sample
-# ::PreparedFiles::CreatesFinalDirectories.execute(log = nil)
