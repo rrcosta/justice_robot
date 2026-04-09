@@ -18,18 +18,23 @@ module PreparedFiles
     # Sample of Struct
     #{ court: "TRIBUNAL_JUSTICA_ESTADUAL", sub_court: "SP", number_process: "10128167420228260309" }
     def execute(log = nil, struct)
+      returned_directory = ''
+
       CREATES.call(FINAL_DIRECTORY)
 
       CREATES.call(court_name(struct))
 
       if struct[:sub_court].nil?
-        CREATES.call(number_process_without_sub_court(struct))
+        returned_directory = number_process_without_sub_court(struct)
+        CREATES.call(returned_directory)
       else
         CREATES.call(sub_court_name(struct))
-        CREATES.call(number_process_with_sub_court(struct))
+
+        returned_directory = number_process_with_sub_court(struct)
+        CREATES.call(returned_directory)
       end
 
-      [true, { }]
+      returned_directory
     rescue Errno::EACCES => e
       msg = "Permissão negada. Detalhes: #{e.message}"
       log.error(msg)
