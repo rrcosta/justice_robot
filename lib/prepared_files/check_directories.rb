@@ -9,17 +9,16 @@ module PreparedFiles
     include ::PreparedFiles::Tools
 
     ROOT_DIRECTORY       = "#{Dir.pwd}/entrada".freeze
-    FINAL_DIRECTORY      = "#{Dir.pwd}/saida".freeze
     CHILDREN_DIRECTORIES = ::Service::Apis::Datajud::Urls::ALL.freeze
 
-    def execute(log)
-      creates_directory(
-        FINAL_DIRECTORY
-      ) unless exists_files_or_directory?(FINAL_DIRECTORY)
+    # lambda
+    CREATES = -> (directory) do
+      return if directory.nil?
+      creates_directory(directory) unless exists_files_or_directory?(directory)
+    end
 
-      creates_directory(
-        ROOT_DIRECTORY
-      ) unless exists_files_or_directory?(ROOT_DIRECTORY)
+    def execute(log)
+      CREATES.call(ROOT_DIRECTORY)
 
       check_children_directories
 
