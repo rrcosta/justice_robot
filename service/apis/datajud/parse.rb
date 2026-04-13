@@ -26,7 +26,16 @@ module Service
           # ]
 
         def execute(body)
+          return if not_result_api?(body)
+
           JSON.parse(process(body))
+        end
+
+        def not_result_api?(body)
+          # Sem conteúdo 
+          # "hits" => {"total" => {"value" => 0, "relation" => "eq"}, "max_score" => nil, "hits" => []}}},
+
+          body.dig(:result, 'hits', 'total', 'value') == 0 && body.dig(:result, 'hits', 'total', 'relation') == 'eq'
         end
 
         def process(body)
