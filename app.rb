@@ -37,14 +37,16 @@ if status
   contents_api.each do |content|
     pre_xls = ::Service::Apis::Datajud::Parse.execute(content)
 
-    # Cria o diretorio final
-    dir_struct = {
-      court: pre_xls&.dig('court'),
-      sub_court: pre_xls&.dig('sub_court'),
-      number_process: pre_xls&.dig('number_process')
-    }
+    if pre_xls
+      # Cria o diretorio final
+      dir_struct = {
+        court: pre_xls&.dig('court'),
+        sub_court: pre_xls&.dig('sub_court'),
+        number_process: pre_xls&.dig('number_process')
+      }
 
-    ::CreatesXlsx::Generates.execute(LOGGER, dir_struct, pre_xls)
+      ::CreatesXlsx::Generates.execute(LOGGER, dir_struct, pre_xls)
+    end
   end
 else
   msg = "Não foi possivel Criar OU Ler os arquivos do diretório ENTRADA. Detalhes: #{err_check_directories[:error]}"
