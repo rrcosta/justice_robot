@@ -2,6 +2,7 @@ require './lib/prepared_files/creates_final_directories'
 
 module CreatesXlsx
   module Util
+    extend self
 
     CUSTOM_COLORS = {
       white:             '#FFFFFF',
