@@ -31,8 +31,9 @@ module CreatesXlsx
       workbook.add_format(
         bold:  1,
         font:  'Calibri',
-        size:  11,
+        size:  12,
         align: 'left',
+        valign: 'vcenter',
         color: ::CreatesXlsx::Util::CUSTOM_COLORS[:teal_dark],
       )
     end

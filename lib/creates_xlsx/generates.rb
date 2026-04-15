@@ -49,6 +49,10 @@ module CreatesXlsx
       headings = ["    Movimentos / Andamentos do Processo #{numero_process(pre_xls)}    " , '', '']
       worksheet_movements.merge_range('A1:D1', headings, heading_movements(workbook))
 
+      # Alturas da Coluna
+      worksheet_movements.set_row(0, 47)
+      worksheet_movements.set_row(17, 33)
+
       worksheet_movements.set_column('A:A', 29)
       worksheet_movements.set_column('B:B', 63)
       worksheet_movements.set_column('C:D', 37)
