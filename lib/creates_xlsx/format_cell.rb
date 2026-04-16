@@ -1,5 +1,7 @@
 module CreatesXlsx
   module FormatCell
+    extend self
+
     def heading_movements(workbook)
       workbook.add_format(
         bold:  1,
